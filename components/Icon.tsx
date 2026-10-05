@@ -6,10 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowDown,
   faArrowRight,
+  faBars,
   faEnvelope,
   faImage,
+  faMagnifyingGlass,
   faQuoteLeft,
   faStar,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faBehance,
@@ -30,6 +33,9 @@ const icons = {
   image: faImage,
   quoteLeft: faQuoteLeft,
   star: faStar,
+  bars: faBars,
+  xmark: faXmark,
+  search: faMagnifyingGlass,
   facebook: faFacebookF,
   instagram: faInstagram,
   behance: faBehance,

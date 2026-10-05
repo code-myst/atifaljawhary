@@ -188,6 +188,12 @@ export default function AdminPage() {
           >
             Testimonials
           </Link>
+          <Link
+            href="/admin/products"
+            className="rounded border px-3 py-1 text-sm"
+          >
+            Products
+          </Link>
           <button
             onClick={handleLogout}
             className="rounded border px-3 py-1 text-sm"

@@ -11,6 +11,7 @@ const siteConfig = {
   name: "Demo Studio",
   tagline: "Design that tells your story",
   brandColor: "#d4af37",
+  currency: "৳",
   contact: { email: "hello@example.com" },
   adminEmail: "your-admin@email.com",
 

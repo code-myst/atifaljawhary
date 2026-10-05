@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getProject } from "@/lib/getProjects";
 import { getSettings } from "@/lib/getSettings";
 
-export const revalidate = 300;
+export const revalidate = 10;
 
 type Props = { params: Promise<{ id: string }> };
 

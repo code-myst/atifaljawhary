@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Icon from "@/components/Icon";
+import NavLinks, { NavLink } from "@/components/NavLinks";
 import { getSettings } from "@/lib/getSettings";
 
 export default async function Navbar() {
@@ -8,7 +8,11 @@ export default async function Navbar() {
     ? `https://wa.me/${settings.whatsappNumber}`
     : "";
 
-  const linkClass = "transition hover:text-[var(--brand-light)]";
+  const links: NavLink[] = [{ label: "Home", href: "/" }];
+  if (settings.aboutText) links.push({ label: "About", href: "/#about" });
+  if (settings.features.portfolio) links.push({ label: "Work", href: "/#work" });
+  if (settings.features.shop) links.push({ label: "Shop", href: "/shop" });
+  links.push({ label: "Contact", href: "/#contact" });
 
   return (
     <header
@@ -22,39 +26,7 @@ export default async function Navbar() {
         <Link href="/" className="font-display gold-text text-xl font-bold">
           {settings.name}
         </Link>
-
-        <div
-          className="flex items-center gap-5 text-sm"
-          style={{ color: "var(--muted)" }}
-        >
-          <Link href="/" className={linkClass}>
-            Home
-          </Link>
-          {settings.aboutText && (
-            <Link href="/#about" className={linkClass}>
-              About
-            </Link>
-          )}
-          {settings.features.portfolio && (
-            <Link href="/#work" className={linkClass}>
-              Work
-            </Link>
-          )}
-          <Link href="/#contact" className={linkClass}>
-            Contact
-          </Link>
-          {wa && (
-            <a
-              href={wa}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              className="icon-btn"
-            >
-              <Icon name="whatsapp" />
-            </a>
-          )}
-        </div>
+        <NavLinks links={links} whatsappUrl={wa} />
       </nav>
     </header>
   );
