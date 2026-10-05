@@ -1,26 +1,238 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0b0b0c;
+  --surface: #141416;
+  --text: #f4efe3;
+  --muted: #a8a293;
+  --line: rgba(255, 255, 255, 0.1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --brand-light: color-mix(in srgb, var(--brand, #d4af37), white 35%);
+  --brand-dark: color-mix(in srgb, var(--brand, #d4af37), black 35%);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), var(--font-bengali), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand, #d4af37), transparent 60%);
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-bengali), Georgia, serif;
+}
+
+.gold-text {
+  background: linear-gradient(
+    135deg,
+    var(--brand-light),
+    var(--brand) 45%,
+    var(--brand-dark)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+}
+
+.hero-glow {
+  background:
+    radial-gradient(
+      60% 50% at 50% 0%,
+      color-mix(in srgb, var(--brand), transparent 78%),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 40% at 85% 70%,
+      color-mix(in srgb, var(--brand), transparent 90%),
+      transparent 70%
+    );
+}
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    135deg,
+    var(--brand-light),
+    var(--brand) 55%,
+    var(--brand-dark)
+  );
+  color: #17130a;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px var(--brand);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--brand), transparent 55%);
+  color: var(--brand-light);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.btn-outline:hover {
+  background: color-mix(in srgb, var(--brand), transparent 88%);
+  transform: translateY(-2px);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--brand), transparent 55%);
+  color: var(--brand-light);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.icon-btn:hover {
+  background: color-mix(in srgb, var(--brand), transparent 85%);
+  transform: translateY(-2px);
+}
+
+.pill {
+  border: 1px solid var(--line);
+  border-radius: 9999px;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.pill:hover {
+  color: var(--brand-light);
+  border-color: color-mix(in srgb, var(--brand), transparent 50%);
+}
+.pill-active,
+.pill-active:hover {
+  background: linear-gradient(
+    135deg,
+    var(--brand-light),
+    var(--brand) 55%,
+    var(--brand-dark)
+  );
+  color: #17130a;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.work-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: transform 0.35s ease, border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.work-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--brand), transparent 40%);
+  box-shadow: 0 20px 50px -25px color-mix(in srgb, var(--brand), transparent 30%);
+}
+
+/* স্ক্রল করলে ফুটে ওঠা (Reveal কম্পোনেন্ট) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* হিরোর জন্য শুধু CSS অ্যানিমেশন */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fadeUp 0.9s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}
+.whatsapp-float {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    135deg,
+    var(--brand-light),
+    var(--brand) 55%,
+    var(--brand-dark)
+  );
+  color: #17130a;
+  box-shadow: 0 10px 30px -10px var(--brand);
+  transition: transform 0.25s ease;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08);
+}
+.whatsapp-float::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--brand);
+  animation: goldPing 2.4s ease-out infinite;
+}
+@keyframes goldPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-float::after {
+    display: none;
+  }
 }

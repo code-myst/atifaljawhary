@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import {
   addDoc,
@@ -180,12 +181,20 @@ export default function AdminPage() {
           <h1 className="text-2xl font-bold">Admin Panel</h1>
           <p className="text-sm text-gray-600">Logged in as {user.email}</p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="rounded border px-3 py-1 text-sm"
-        >
-          Logout
-        </button>
+        <div className="flex gap-2">
+          <Link
+            href="/admin/testimonials"
+            className="rounded border px-3 py-1 text-sm"
+          >
+            Testimonials
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="rounded border px-3 py-1 text-sm"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       <form

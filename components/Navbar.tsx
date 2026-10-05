@@ -1,20 +1,59 @@
 import Link from "next/link";
-import siteConfig from "@/site.config";
+import Icon from "@/components/Icon";
+import { getSettings } from "@/lib/getSettings";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const settings = await getSettings();
+  const wa = settings.whatsappNumber
+    ? `https://wa.me/${settings.whatsappNumber}`
+    : "";
+
+  const linkClass = "transition hover:text-[var(--brand-light)]";
+
   return (
-    <header className="border-b">
-      <nav className="mx-auto flex max-w-5xl items-center justify-between p-4">
-        <Link
-          href="/"
-          className="text-xl font-bold"
-          style={{ color: "var(--brand)" }}
-        >
-          {siteConfig.name}
+    <header
+      className="sticky top-0 z-40 border-b backdrop-blur-md"
+      style={{
+        borderColor: "var(--line)",
+        backgroundColor: "rgba(11, 11, 12, 0.75)",
+      }}
+    >
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <Link href="/" className="font-display gold-text text-xl font-bold">
+          {settings.name}
         </Link>
-        <div className="flex gap-4 text-sm">
-          <Link href="/">Home</Link>
-          <a href={`mailto:${siteConfig.contact.email}`}>Contact</a>
+
+        <div
+          className="flex items-center gap-5 text-sm"
+          style={{ color: "var(--muted)" }}
+        >
+          <Link href="/" className={linkClass}>
+            Home
+          </Link>
+          {settings.aboutText && (
+            <Link href="/#about" className={linkClass}>
+              About
+            </Link>
+          )}
+          {settings.features.portfolio && (
+            <Link href="/#work" className={linkClass}>
+              Work
+            </Link>
+          )}
+          <Link href="/#contact" className={linkClass}>
+            Contact
+          </Link>
+          {wa && (
+            <a
+              href={wa}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="icon-btn"
+            >
+              <Icon name="whatsapp" />
+            </a>
+          )}
         </div>
       </nav>
     </header>

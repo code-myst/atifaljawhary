@@ -1,0 +1,109 @@
+export type SiteType = "graphic" | "artist" | "both";
+
+export type Features = {
+  portfolio: boolean;
+  shop: boolean;
+  cart: boolean;
+  customOrders: boolean;
+  testimonials: boolean;
+};
+
+export const featureLabels: Record<keyof Features, string> = {
+  portfolio: "Portfolio (কাজের নমুনা)",
+  shop: "Shop (রেডিমেড প্রোডাক্ট বিক্রি)",
+  cart: "Cart (কার্টে যোগ করা)",
+  customOrders: "Custom order (অর্ডার নিয়ে আঁকা)",
+  testimonials: "Testimonials (ক্লায়েন্টের মতামত)",
+};
+
+export const siteTypeLabels: Record<SiteType, string> = {
+  graphic: "গ্রাফিক ডিজাইনার",
+  artist: "শিল্পী / ক্যালিগ্রাফি (বিক্রি করেন)",
+  both: "দুটোই",
+};
+
+export const presets: Record<SiteType, Features> = {
+  graphic: {
+    portfolio: true,
+    shop: false,
+    cart: false,
+    customOrders: true,
+    testimonials: true,
+  },
+  artist: {
+    portfolio: false,
+    shop: true,
+    cart: true,
+    customOrders: true,
+    testimonials: true,
+  },
+  both: {
+    portfolio: true,
+    shop: true,
+    cart: true,
+    customOrders: true,
+    testimonials: true,
+  },
+};
+
+// Shop বন্ধ থাকলে Cart চালু থাকতে পারবে না
+export function normalizeFeatures(f: Features): Features {
+  return { ...f, cart: f.shop && f.cart };
+}
+
+// শুধু সংখ্যা রাখে (যেমন 8801XXXXXXXXX)
+export function cleanWhatsapp(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
+export function isSiteType(value: unknown): value is SiteType {
+  return value === "graphic" || value === "artist" || value === "both";
+}
+
+export type Socials = {
+  facebook: string;
+  instagram: string;
+  behance: string;
+  linkedin: string;
+  youtube: string;
+};
+
+export const socialKeys: (keyof Socials)[] = [
+  "facebook",
+  "instagram",
+  "behance",
+  "linkedin",
+  "youtube",
+];
+
+export const socialLabels: Record<keyof Socials, string> = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+  behance: "Behance",
+  linkedin: "LinkedIn",
+  youtube: "YouTube",
+};
+
+export const emptySocials: Socials = {
+  facebook: "",
+  instagram: "",
+  behance: "",
+  linkedin: "",
+  youtube: "",
+};
+
+// https:// না থাকলে নিজে বসিয়ে দেয়
+export function normalizeUrl(value: string): string {
+  const v = value.trim();
+  if (!v) return "";
+  return /^https?:\/\//i.test(v) ? v : `https://${v}`;
+}
+
+// "Logo, Branding" -> ["Logo", "Branding"] (সর্বোচ্চ ১২টা)
+export function parseSkills(value: string): string[] {
+  return value
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 12);
+}
