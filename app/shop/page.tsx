@@ -5,7 +5,7 @@ import siteConfig from "@/site.config";
 import { getProducts } from "@/lib/getProducts";
 import { getSettings } from "@/lib/getSettings";
 
-export const revalidate = 10;
+export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();

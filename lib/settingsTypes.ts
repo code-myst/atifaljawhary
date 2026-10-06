@@ -1,3 +1,4 @@
+
 export type SiteType = "graphic" | "artist" | "both";
 
 export type Features = {
@@ -106,4 +107,74 @@ export function parseSkills(value: string): string[] {
     .map((s) => s.trim())
     .filter(Boolean)
     .slice(0, 12);
+}
+export type PaymentField = { id: string; label: string; required: boolean };
+
+export type PaymentMethod = {
+  id: string;
+  name: string;
+  number: string;
+  instructions: string;
+  fields: PaymentField[];
+};
+
+export function newId(): string {
+  return Math.random().toString(36).slice(2, 10);
+}
+
+export function parsePaymentMethods(raw: unknown): PaymentMethod[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((m): PaymentMethod[] => {
+    if (!m || typeof m !== "object") return [];
+    const o = m as Record<string, unknown>;
+    const name = typeof o.name === "string" ? o.name : "";
+    if (!name) return [];
+
+    const fields = Array.isArray(o.fields)
+      ? o.fields.flatMap((f): PaymentField[] => {
+          if (!f || typeof f !== "object") return [];
+          const fo = f as Record<string, unknown>;
+          const label = typeof fo.label === "string" ? fo.label : "";
+          if (!label) return [];
+          return [
+            {
+              id: typeof fo.id === "string" && fo.id ? fo.id : newId(),
+              label,
+              required: fo.required !== false,
+            },
+          ];
+        })
+      : [];
+
+    return [
+      {
+        id: typeof o.id === "string" && o.id ? o.id : newId(),
+        name,
+        number: typeof o.number === "string" ? o.number : "",
+        instructions:
+          typeof o.instructions === "string" ? o.instructions : "",
+        fields,
+      },
+    ];
+  });
+}
+
+export function cleanPaymentMethods(methods: PaymentMethod[]): PaymentMethod[] {
+  return methods
+    .map((m) => ({
+      id: m.id || newId(),
+      name: m.name.trim().slice(0, 60),
+      number: m.number.trim().slice(0, 40),
+      instructions: m.instructions.trim().slice(0, 600),
+      fields: m.fields
+        .map((f) => ({
+          id: f.id || newId(),
+          label: f.label.trim().slice(0, 60),
+          required: f.required,
+        }))
+        .filter((f) => f.label)
+        .slice(0, 8),
+    }))
+    .filter((m) => m.name)
+    .slice(0, 6);
 }

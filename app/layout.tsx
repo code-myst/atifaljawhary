@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import { Hind_Siliguri, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import MobileNav from "@/components/MobileNav";
+import Navbar from "@/components/Navbar";
+import Providers from "@/components/Providers";
 import SiteChrome from "@/components/SiteChrome";
-import { getSettings } from "@/lib/getSettings";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { getSettings } from "@/lib/getSettings";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -47,13 +49,20 @@ export default async function RootLayout({
       className={`${display.variable} ${sans.variable} ${bengali.variable}`}
     >
       <body style={{ "--brand": settings.brandColor } as CSSProperties}>
-                <SiteChrome
-          header={<Navbar />}
-          footer={<Footer />}
-          floating={<WhatsAppFloat />}
-        >
-          {children}
-        </SiteChrome>
+        <Providers>
+          <SiteChrome
+            header={<Navbar />}
+            footer={<Footer />}
+            floating={
+              <>
+                <WhatsAppFloat />
+                <MobileNav />
+              </>
+            }
+          >
+            {children}
+          </SiteChrome>
+        </Providers>
       </body>
     </html>
   );

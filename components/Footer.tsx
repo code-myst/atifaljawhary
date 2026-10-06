@@ -11,7 +11,7 @@ export default async function Footer() {
   return (
     <footer
       id="contact"
-      className="mt-24 scroll-mt-20 border-t"
+      className="mt-24 scroll-mt-20 border-t pb-20 md:pb-0"
       style={{ borderColor: "var(--line)", backgroundColor: "var(--surface)" }}
     >
       <div className="mx-auto max-w-6xl px-4 py-14 text-center">

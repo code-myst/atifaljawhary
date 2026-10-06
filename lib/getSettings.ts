@@ -4,11 +4,13 @@ import { db } from "@/lib/firebase";
 import siteConfig from "@/site.config";
 import {
   Features,
+  PaymentMethod,
   SiteType,
   Socials,
   emptySocials,
   isSiteType,
   normalizeFeatures,
+  parsePaymentMethods,
   parseSkills,
   presets,
   socialKeys,
@@ -26,6 +28,7 @@ export type SiteSettings = {
   aboutImage: string;
   skills: string[];
   socials: Socials;
+  paymentMethods: PaymentMethod[];
 };
 
 export const defaultSettings: SiteSettings = {
@@ -40,6 +43,7 @@ export const defaultSettings: SiteSettings = {
   aboutImage: "",
   skills: [],
   socials: emptySocials,
+  paymentMethods: [],
 };
 
 const fetchSettings = unstable_cache(
@@ -87,6 +91,7 @@ const fetchSettings = unstable_cache(
       aboutImage: d.aboutImage ? String(d.aboutImage) : "",
       skills: d.skills ? parseSkills(String(d.skills)) : [],
       socials,
+      paymentMethods: parsePaymentMethods(d.paymentMethods),
     };
   },
   ["settings"],

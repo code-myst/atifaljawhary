@@ -26,7 +26,11 @@ export default async function Navbar() {
         <Link href="/" className="font-display gold-text text-xl font-bold">
           {settings.name}
         </Link>
-        <NavLinks links={links} whatsappUrl={wa} />
+        <NavLinks
+          links={links}
+          whatsappUrl={wa}
+          showCart={settings.features.cart}
+        />
       </nav>
     </header>
   );

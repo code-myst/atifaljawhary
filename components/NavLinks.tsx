@@ -3,17 +3,21 @@
 import Link from "next/link";
 import { useState } from "react";
 import Icon from "@/components/Icon";
+import { useCart } from "@/components/Providers";
 
 export type NavLink = { label: string; href: string };
 
 export default function NavLinks({
   links,
   whatsappUrl,
+  showCart,
 }: {
   links: NavLink[];
   whatsappUrl: string;
+  showCart: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
   const linkClass = "transition hover:text-[var(--brand-light)]";
 
   return (
@@ -27,6 +31,16 @@ export default function NavLinks({
             {l.label}
           </Link>
         ))}
+
+        {showCart && (
+          <Link href="/cart" aria-label="Cart" className="icon-btn relative">
+            <Icon name="cart" />
+            {count > 0 && <span className="tab-badge">{count}</span>}
+          </Link>
+        )}
+        <Link href="/account" aria-label="Account" className="icon-btn">
+          <Icon name="user" />
+        </Link>
         {whatsappUrl && (
           <a
             href={whatsappUrl}

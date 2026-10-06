@@ -9,20 +9,26 @@ import { auth, db } from "@/lib/firebase";
 import siteConfig from "@/site.config";
 import {
   Features,
+  PaymentMethod,
   SiteType,
   Socials,
+  cleanPaymentMethods,
   cleanWhatsapp,
   emptySocials,
   featureLabels,
   isSiteType,
   normalizeFeatures,
   normalizeUrl,
+  parsePaymentMethods,
   parseSkills,
   presets,
   siteTypeLabels,
   socialKeys,
   socialLabels,
 } from "@/lib/settingsTypes";
+import PaymentMethodsEditor from "@/components/admin/PaymentMethodsEditor";
+import DangerZone from "@/components/admin/DangerZone";
+import NotificationSettings from "@/components/admin/NotificationSettings";
 
 export default function AdminSettings() {
   const router = useRouter();
@@ -43,6 +49,7 @@ export default function AdminSettings() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
@@ -72,6 +79,7 @@ export default function AdminSettings() {
         if (d.aboutText) setAboutText(String(d.aboutText));
         if (d.aboutImage) setAboutImage(String(d.aboutImage));
         if (d.skills) setSkills(String(d.skills));
+        setPaymentMethods(parsePaymentMethods(d.paymentMethods));
 
         const rawSocials = (d.socials ?? {}) as Record<string, unknown>;
         const loaded: Socials = { ...emptySocials };
@@ -165,6 +173,7 @@ export default function AdminSettings() {
           aboutImage,
           skills: cleanSkills,
           socials: cleanSocials,
+          paymentMethods: cleanPaymentMethods(paymentMethods),
         },
         { merge: true }
       );
@@ -172,6 +181,7 @@ export default function AdminSettings() {
       setWhatsappNumber(cleanWhatsapp(whatsappNumber));
       setSocials(cleanSocials);
       setSkills(cleanSkills);
+      setPaymentMethods(cleanPaymentMethods(paymentMethods));
       setMessage("Saved. সাইটে পরিবর্তন আসতে সর্বোচ্চ ৫ মিনিট লাগতে পারে।");
     } catch (error) {
       console.error("Save settings error:", error);
@@ -187,12 +197,7 @@ export default function AdminSettings() {
 
   return (
     <main className="mx-auto max-w-xl p-4">
-      <div className="py-6">
-        <Link href="/admin" className="text-sm text-gray-600 hover:underline">
-          ← Back to admin
-        </Link>
-        <h1 className="mt-2 text-2xl font-bold">Site Settings</h1>
-      </div>
+      <h1 className="mb-5 text-2xl font-bold tracking-tight">Settings</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
@@ -349,7 +354,17 @@ export default function AdminSettings() {
             ))}
           </div>
         </fieldset>
-
+        <fieldset className="rounded border p-4">
+          <legend className="px-1 text-sm font-semibold">Payment methods</legend>
+          <p className="mb-3 text-xs text-gray-500">
+            গ্রাহক চেকআউটে মেথড বেছে নম্বরে টাকা পাঠাবে এবং নিচের ঘরগুলো পূরণ
+            করবে। এখানকার তথ্য সাইটে সবাই দেখতে পায়।
+          </p>
+          <PaymentMethodsEditor
+            value={paymentMethods}
+            onChange={setPaymentMethods}
+          />
+        </fieldset>
         <button
           type="submit"
           disabled={saving || uploading}
@@ -359,6 +374,8 @@ export default function AdminSettings() {
         </button>
         {message && <p className="text-sm text-gray-700">{message}</p>}
       </form>
+      <NotificationSettings />
+      <DangerZone />
     </main>
   );
 }

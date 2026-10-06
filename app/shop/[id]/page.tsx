@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AddToCartButton from "@/components/AddToCartButton";
 import Icon from "@/components/Icon";
 import ProductGallery from "@/components/ProductGallery";
+import ReviewsSection from "@/components/ReviewsSection";
 import siteConfig from "@/site.config";
 import { formatPrice } from "@/lib/format";
 import { getProduct } from "@/lib/getProducts";
+import { getReviews } from "@/lib/getReviews";
 import { getSettings } from "@/lib/getSettings";
 
-export const revalidate = 10;
+export const revalidate = 300;
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -43,9 +46,12 @@ export default async function ProductPage({ params }: Props) {
   const product = await getProduct(id);
   if (!product) notFound();
 
+  const reviews = await getReviews(product.id);
+
   const price = formatPrice(product.price, siteConfig.currency);
   const soldOut = product.stock <= 0;
   const lowStock = !soldOut && product.stock <= 3;
+  const cartOn = settings.features.cart;
 
   const waLink = (message: string) =>
     settings.whatsappNumber
@@ -109,40 +115,67 @@ export default async function ProductPage({ params }: Props) {
             </p>
           )}
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-col gap-3">
             {soldOut ? (
-              askLink && (
-                <a
-                  href={askLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline"
-                >
-                  <Icon name="whatsapp" /> Ask for something similar
-                </a>
-              )
-            ) : orderLink ? (
-              <a
-                href={orderLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-gold"
-              >
-                <Icon name="whatsapp" /> Order on WhatsApp
-              </a>
+              <div className="flex flex-wrap gap-3">
+                {askLink && (
+                  <a
+                    href={askLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-outline"
+                  >
+                    <Icon name="whatsapp" /> Ask for something similar
+                  </a>
+                )}
+                {settings.features.customOrders && (
+                  <Link href="/custom-order" className="btn-gold">
+                    <Icon name="brush" /> Request a custom piece
+                  </Link>
+                )}
+              </div>
             ) : (
-              <a
-                href={`mailto:${settings.contactEmail}?subject=${encodeURIComponent(
-                  `Order: ${product.title}`
-                )}`}
-                className="btn-gold"
-              >
-                <Icon name="envelope" /> Order by email
-              </a>
+              <>
+                {cartOn && (
+                  <AddToCartButton
+                    product={{
+                      id: product.id,
+                      title: product.title,
+                      price: product.price,
+                      image: product.images[0] ?? "",
+                      stock: product.stock,
+                    }}
+                  />
+                )}
+
+                {orderLink ? (
+                  <a
+                    href={orderLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${cartOn ? "btn-outline" : "btn-gold"} w-fit`}
+                  >
+                    <Icon name="whatsapp" /> Order on WhatsApp
+                  </a>
+                ) : (
+                  !cartOn && (
+                    <a
+                      href={`mailto:${settings.contactEmail}?subject=${encodeURIComponent(
+                        `Order: ${product.title}`
+                      )}`}
+                      className="btn-gold w-fit"
+                    >
+                      <Icon name="envelope" /> Order by email
+                    </a>
+                  )
+                )}
+              </>
             )}
           </div>
         </div>
       </div>
+
+      <ReviewsSection productId={product.id} reviews={reviews} />
     </main>
   );
 }
