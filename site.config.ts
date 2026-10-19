@@ -25,8 +25,8 @@ const siteConfig = {
   },
 
   cloudinary: {
-    cloudName: "dbdkxzx7z",
-    uploadPreset: "designer-site",
+    cloudName: "wswiilug",
+    uploadPreset: "atifaj",
   },
 
   // ---- Firestore খালি থাকলে এগুলো দেখাবে ----
