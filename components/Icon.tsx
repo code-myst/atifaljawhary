@@ -13,6 +13,8 @@ import {
   faBoxesStacked,
   faCartShopping,
   faCheck,
+  faChevronLeft,    // এটি এখানে সলিড আইকন প্যাকেজ থেকে ইমপোর্ট করা হলো
+  faChevronRight,   // এটি এখানে সলিড আইকন প্যাকেজ থেকে ইমপোর্ট করা হলো[cite: 1]
   faEnvelope,
   faGaugeHigh,
   faGear,
@@ -38,8 +40,6 @@ import {
   faLinkedinIn,
   faWhatsapp,
   faYoutube,
-  faChevronLeft,
-  faChevronRight,
 } from "@fortawesome/free-brands-svg-icons";
 
 config.autoAddCss = false;
@@ -77,6 +77,8 @@ const icons = {
   behance: faBehance,
   linkedin: faLinkedinIn,
   youtube: faYoutube,
+  chevronLeft: faChevronLeft,   // আইকন ম্যাপিং এ যুক্ত করা হলো
+  chevronRight: faChevronRight, // আইকন ম্যাপিং এ যুক্ত করা হলো
 };
 
 export type IconName = keyof typeof icons;
