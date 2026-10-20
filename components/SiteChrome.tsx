@@ -20,16 +20,6 @@ export default function SiteChrome({
     return <>{children}</>;
   }
 
-  // /work পেজে Navbar, নিচের ট্যাব বার ও ভাসমান বাটন নেই; শুধু Footer
-  if (pathname === "/work") {
-    return (
-      <>
-        {children}
-        {footer}
-      </>
-    );
-  }
-
   return (
     <>
       {header}
