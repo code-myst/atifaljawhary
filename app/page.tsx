@@ -42,7 +42,13 @@ export default async function Home() {
               </h2>
             </div>
           </Reveal>
-          <ProjectGrid projects={projects} />
+          <ProjectGrid projects={projects} layout="slider" limit={8} />
+
+          <div className="mt-6 text-center">
+            <Link href="/work" className="btn-outline">
+              সব কাজ দেখুন
+            </Link>
+          </div>
         </section>
       )}
 
