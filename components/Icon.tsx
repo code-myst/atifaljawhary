@@ -38,6 +38,8 @@ import {
   faLinkedinIn,
   faWhatsapp,
   faYoutube,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-brands-svg-icons";
 
 config.autoAddCss = false;
